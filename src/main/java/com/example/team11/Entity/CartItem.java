@@ -16,6 +16,7 @@ public class CartItem {
     private Double price;
     private Long supplierId;
     private Long orderId;
+    private String category;
     // Define the ManyToOne relationship with Cart
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false) // This creates the foreign key column "cart_id"
@@ -23,6 +24,12 @@ public class CartItem {
     private Cart cart;
 
     // Getters and setters
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
     public Long getSupplierId() {
         return supplierId;
     }
@@ -74,4 +81,10 @@ public class CartItem {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+    // public Product getProduct() {
+    //     return product;
+    // }
+    // public void setProduct(Product product) {
+    //     this.product = product;
+    // }
 }

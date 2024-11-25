@@ -5,6 +5,8 @@ public class CartItemDTO {
     private String productName;
     private Integer quantity;
     private Double price;
+    private Long supplierId;
+    private String category;
 
     // Getters and setters
     public Long getId() { return id; }
@@ -18,4 +20,10 @@ public class CartItemDTO {
 
     public Double getPrice() { return price; }
     public void setPrice(Double price) { this.price = price; }
+
+    public Long getSupplierId() { return supplierId; }
+    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 }

@@ -1,10 +1,12 @@
 package com.example.team11.Controller;
 
 import com.example.team11.DTO.CartDTO;
+import com.example.team11.DTO.ProductQuantityDTO;
 import com.example.team11.Service.CartService;
+// import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 //*****************************
-import com.example.team11.Entity.CartItem;
+// import com.example.team11.Entity.CartItem;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +26,11 @@ public class CartController {
     }
 
     // Create a new Cart
-    @PostMapping("/create")
-    public CartDTO createCart() {
-        return cartService.createCart();
+    @GetMapping("/create/{userId}")
+    public Long createCart(@PathVariable Long userId) {
+        cartService.createCart(userId);
+        Long cartId = cartService.getCartIdByUserId(userId);
+        return cartId;
     }
 
     // Delete a Cart by ID
@@ -44,7 +48,7 @@ public class CartController {
     //*****************************
     // Get Cart Items by Cart ID
     @GetMapping("/{userId}/items")
-    public List<CartItem> getCartItems(@PathVariable Long userId) {
+    public List<ProductQuantityDTO> getCartItems(@PathVariable Long userId) {
         
        logger.info("Fetching cart items for User ID: {}", userId);
        Long cartId = cartService.getCartIdByUserId(userId);
@@ -56,6 +60,11 @@ public class CartController {
     public Long getCartIdByUserId(@PathVariable Long userId) {
         logger.info("Fetching cart ID for User ID: {}", userId);
         return cartService.getCartIdByUserId(userId);
+    }
+    @PostMapping("/{cartId}/checkout")
+    public void checkoutCart(@PathVariable Long cartId, @RequestBody CartDTO cart) {
+        logger.info("Cart Controller: Checking out cart ID: {}", cartId);
+        // cartService.checkoutCart(cartId, cart);
     }
     //*****************************
 }

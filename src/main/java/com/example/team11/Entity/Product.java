@@ -13,9 +13,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(nullable = false)
-    private String name;
+    private String productName;
 
     @Column(nullable = false)
     private double price;
@@ -26,6 +26,9 @@ public class Product {
     @Column(nullable = false)
     private String category;
 
+    @Column(nullable = false)
+    private Long supplierId;
+    
     // Getters and Setters
     public Long getId() {
         return id;
@@ -35,12 +38,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public double getPrice() {
@@ -65,5 +68,13 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 }

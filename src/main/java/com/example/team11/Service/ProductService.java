@@ -25,7 +25,7 @@ public class ProductService {
         return productRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public ProductDTO getProductById(int id) {
+    public ProductDTO getProductById(long id) {
         logger.info("Service: Inside getProductById, Product ID: {}", id);
         return productRepository.findById((long) id).map(this::convertToDTO).orElse(null);
     }
@@ -59,17 +59,17 @@ public class ProductService {
     private ProductDTO convertToDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
-        productDTO.setName(product.getName());
+        productDTO.setProductName(product.getProductName());
         productDTO.setPrice(product.getPrice());
         productDTO.setQuantity(product.getQuantity());
         productDTO.setCategory(product.getCategory());
         return productDTO;
     }
 
-    private Product convertToEntity(ProductDTO productDTO) {
+    public Product convertToEntity(ProductDTO productDTO) {
         Product product = new Product();
         product.setId(productDTO.getId());
-        product.setName(productDTO.getName());
+        product.setProductName(productDTO.getProductName());
         product.setPrice(productDTO.getPrice());
         product.setQuantity(productDTO.getQuantity());
         product.setCategory(productDTO.getCategory());
