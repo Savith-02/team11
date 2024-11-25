@@ -24,7 +24,7 @@ public class ProductService {
         logger.info("Service: Inside getAllProducts");
         return productRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
-
+    
     public ProductDTO getProductById(long id) {
         logger.info("Service: Inside getProductById, Product ID: {}", id);
         return productRepository.findById((long) id).map(this::convertToDTO).orElse(null);
@@ -63,6 +63,7 @@ public class ProductService {
         productDTO.setPrice(product.getPrice());
         productDTO.setQuantity(product.getQuantity());
         productDTO.setCategory(product.getCategory());
+        productDTO.setSupplierId(product.getSupplierId());
         return productDTO;
     }
 
@@ -73,6 +74,7 @@ public class ProductService {
         product.setPrice(productDTO.getPrice());
         product.setQuantity(productDTO.getQuantity());
         product.setCategory(productDTO.getCategory());
+        product.setSupplierId(productDTO.getSupplierId());
         return product;
     }
 

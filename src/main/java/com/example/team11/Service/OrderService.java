@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import com.example.team11.DTO.OrderDTO;
 import com.example.team11.Entity.Order;
@@ -15,6 +18,7 @@ import com.example.team11.Repository.ProductRepository;
 
 @Service
 public class OrderService {
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -33,12 +37,29 @@ public class OrderService {
         return order.map(this::convertToDTO).orElse(null);
     }
 
+       public List<Long> getProductIdsFromNames(List<String> productNames) {
+       List<Product> products = productRepository.findByProductNameIn(productNames);
+       return products.stream()
+                      .map(Product::getId)
+                      .collect(Collectors.toList());
+   }
     // Create a new order
-    public OrderDTO createOrder(OrderDTO orderDTO) {
-        List<Product> products = productRepository.findAllById(orderDTO.getProductIds());
+    public OrderDTO createOrder(OrderDTO orderDTO, double total) {
+        logger.info("Order Service: Creating order with OrderDTO: {}", orderDTO);
+        List<String> productNames = orderDTO.getProductNames();
+        List<Long> productIds = getProductIdsFromNames(productNames);
+        List<Product> products = productRepository.findAllById(productIds);
+        
+        // // Calculate the total
+        // double total = products.stream()
+        //                        .mapToDouble(product -> product.getPrice() * orderDTO.getProductIds().stream()
+        //                            .filter(id -> id.equals(product.getId()))
+        //                            .count())
+        //                        .sum();
+        
         Order order = new Order();
         order.setProducts(products);
-        order.setTotal(calculateTotal(products));
+        order.setTotal(total); // Set the calculated total
         order.setStatus("New");
         order = orderRepository.save(order);
         return convertToDTO(order);
@@ -66,7 +87,7 @@ public class OrderService {
         return dto;
     }
 
-    private double calculateTotal(List<Product> products) {
-        return products.stream().mapToDouble(product -> product.getPrice()).sum();
-    }
+    // private double calculateTotal(List<Product> products) {
+    //     return products.stream().mapToDouble(product -> product.getPrice()).sum();
+    // }
 }

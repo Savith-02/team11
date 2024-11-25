@@ -62,9 +62,9 @@ public class CartController {
         return cartService.getCartIdByUserId(userId);
     }
     @PostMapping("/{cartId}/checkout")
-    public void checkoutCart(@PathVariable Long cartId, @RequestBody CartDTO cart) {
+    public void checkoutCart(@PathVariable Long cartId) {
         logger.info("Cart Controller: Checking out cart ID: {}", cartId);
-        // cartService.checkoutCart(cartId, cart);
+        cartService.checkoutCart(cartId);
     }
     //*****************************
 }

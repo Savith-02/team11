@@ -5,6 +5,7 @@ import java.util.List;
 public class OrderDTO {
     private int id;
     private List<Long> productIds; // List of product IDs
+    private List<String> productNames; // List of product names
     private double total;
     private String status;
 
@@ -23,6 +24,14 @@ public class OrderDTO {
 
     public void setProductIds(List<Long> productIds) {
         this.productIds = productIds;
+    }
+
+    public List<String> getProductNames() {
+        return productNames;
+    }
+
+    public void setProductNames(List<String> productNames) {
+        this.productNames = productNames;
     }
 
     public double getTotal() {

@@ -27,7 +27,7 @@ public class CartItemController {
     // Add a CartItem
     @PostMapping
     public void addCartItem(@PathVariable Long cartId, @RequestBody AddProductToCartDTO addProductToCartDTO) {
-        logger.info("Inside addCartItem, Adding product to cart ID:{} in cart Id: {}", addProductToCartDTO.getProductId(), cartId);
+        logger.info("Inside addCartItem, Adding product to cart ID:{}", addProductToCartDTO.getProductId(), cartId);
         logger.info("Quantity: {}", addProductToCartDTO.getQuantity());
         // ProductQuantityDTO productQuantityDTO = new ProductQuantityDTO();
         ProductDTO productDTO = productService.getProductById(addProductToCartDTO.getProductId());
@@ -48,7 +48,6 @@ public class CartItemController {
     }
 */
     // Delete a CartItem
-    @CrossOrigin(origins = "*")
     @DeleteMapping("/{itemId}")
     public void deleteCartItem(@PathVariable Long cartId, @PathVariable Long itemId) {
         logger.info("Inside deleteCartItem, Deleting item ID:{} in cart Id: {}", itemId, cartId);

@@ -40,7 +40,10 @@ public class Cart {
     }
 
     public Double getTotalPrice() {
-        return totalPrice;
+        totalPrice = items.stream()
+                    .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                    .sum();
+        return  totalPrice;
     }
 
     public void setTotalPrice(Double totalPrice) {
@@ -54,4 +57,5 @@ public class Cart {
     public void setUser(User user) {
         this.user = user;
     }
+
 }

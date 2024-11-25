@@ -12,8 +12,10 @@ import com.example.team11.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 //*****************************
 import com.example.team11.Repository.CartItemRepository;
+// import com.example.team11.Service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.example.team11.DTO.OrderDTO;
 // import com.example.team11.Entity.Product;
 // import com.example.team11.Service.ProductService;
 // import com.example.team11.DTO.ProductDTO;
@@ -25,12 +27,14 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
+    private final OrderService orderService;
     // private final ProductService productService;
     //*****************************
-    public CartService(CartRepository cartRepository, CartItemRepository cartItemRepository, UserRepository userRepository) {
+    public CartService(CartRepository cartRepository, CartItemRepository cartItemRepository, UserRepository userRepository, OrderService orderService) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.userRepository = userRepository;
+        this.orderService = orderService;
             // this.productService = productService;
     }
     //*****************************
@@ -106,12 +110,29 @@ public CartDTO getCartById(Long id) {
        // In CartService.java
    public Long getCartIdByUserId(Long userId) {
        logger.info("Fetching cart ID for User ID: {}", userId);
-       Cart cart = cartRepository.findByUserId(userId)
-               .orElseThrow(() -> new RuntimeException("Cart not found for user ID: " + userId));
-       return cart.getId();
+       return cartRepository.findByUserId(userId)
+               .map(Cart::getId)
+               .orElse(null); // Return null if cart not found
    }
    public void checkoutCart(Long cartId) {
-    logger.info("Cart Service: Checking out cart ID: {}", cartId);
+       logger.info("Cart Service: Checking out cart ID: {}", cartId);
+    Cart cart = cartRepository.findById(cartId)
+            .orElseThrow(() -> new RuntimeException("Cart not found"));
+    OrderDTO orderDTO = new OrderDTO();
+    orderDTO.setProductIds(cart.getItems().stream()
+            .map(CartItem::getId)
+            .collect(Collectors.toList()));
+
+    orderDTO.setTotal(cart.getTotalPrice());
+    logger.info("Cart Service: Total price: {}", cart.getTotalPrice());
+    orderDTO.setProductNames(cart.getItems().stream()
+            .map(CartItem::getProductName)
+            .collect(Collectors.toList()));
+
+    logger.info("Cart Service: OrderDTO: {}", orderDTO);
+    logger.info("Cart Service: Total price: {}", cart.getTotalPrice());
+    orderService.createOrder(orderDTO, cart.getTotalPrice());
+    cartRepository.delete(cart);
 
 }
 //*****************************
