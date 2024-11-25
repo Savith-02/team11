@@ -29,6 +29,7 @@ public class CartItemController {
     }
 */
     // Delete a CartItem
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{itemId}")
     public void deleteCartItem(@PathVariable Long cartId, @PathVariable Long itemId) {
         logger.info("Inside deleteCartItem, Deleting item ID:{} in cart Id: {}", itemId, cartId);
